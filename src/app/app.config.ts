@@ -11,3 +11,4 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes), provideClientHydration(withEventReplay())
   ]
 };
+export const FORCE_MOCK = true;

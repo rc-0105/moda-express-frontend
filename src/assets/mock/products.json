@@ -1,0 +1,144 @@
+{
+  "status": "ok",
+  "data": {
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Camiseta Blanca Classic",
+        "precio": 45000,
+        "descripcion": "Camiseta 100% algodón, corte recto.",
+        "categoriaId": 2,
+        "imagen_url": "assets/uploads/camiseta-blanca.jpg",
+        "variants": [
+          { "id": 101, "talla": "S", "color": "Blanco", "stock": 15, "sku": "CAM-WHT-S-01" },
+          { "id": 102, "talla": "M", "color": "Blanco", "stock": 12, "sku": "CAM-WHT-M-01" }
+        ]
+      },
+      {
+        "id": 2,
+        "nombre": "Hoodie Negra Urban",
+        "precio": 85000,
+        "descripcion": "Buzo con capota, interior afelpado.",
+        "categoriaId": 3,
+        "imagen_url": "assets/uploads/hoodie-negra.jpg",
+        "variants": [
+          { "id": 201, "talla": "M", "color": "Negro", "stock": 8, "sku": "HOO-BLK-M-01" }
+        ]
+      },
+      {
+        "id": 3,
+        "nombre": "Jeans Slim Fit Azul",
+        "precio": 120000,
+        "descripcion": "Jeans corte slim con stretch.",
+        "categoriaId": 4,
+        "imagen_url": "assets/uploads/jeans-azul.jpg",
+        "variants": [
+          { "id": 301, "talla": "32", "color": "Azul", "stock": 6, "sku": "JEA-BLU-32-01" },
+          { "id": 302, "talla": "34", "color": "Azul", "stock": 10, "sku": "JEA-BLU-34-01" }
+        ]
+      },
+      {
+        "id": 4,
+        "nombre": "Camisa Manga Larga Rayas",
+        "precio": 68000,
+        "descripcion": "Camisa de algodón con rayas finas.",
+        "categoriaId": 2,
+        "imagen_url": "assets/uploads/camisa-rayas.jpg",
+        "variants": [
+          { "id": 401, "talla": "M", "color": "Azul", "stock": 4, "sku": "CAM-RAY-M-01" }
+        ]
+      },
+      {
+        "id": 5,
+        "nombre": "Vestido Floral Midi",
+        "precio": 99000,
+        "descripcion": "Vestido con estampado floral y corte midi.",
+        "categoriaId": 5,
+        "imagen_url": "assets/uploads/vestido-floral.jpg",
+        "variants": [
+          { "id": 501, "talla": "S", "color": "Multicolor", "stock": 7, "sku": "VST-FLR-S-01" }
+        ]
+      },
+      {
+        "id": 6,
+        "nombre": "Polera Técnica Running",
+        "precio": 55000,
+        "descripcion": "Polera ligera para entrenamiento.",
+        "categoriaId": 6,
+        "imagen_url": "assets/uploads/polera-running.jpg",
+        "variants": [
+          { "id": 601, "talla": "L", "color": "Gris", "stock": 20, "sku": "POL-RUN-L-01" }
+        ]
+      },
+      {
+        "id": 7,
+        "nombre": "Chaqueta Denim",
+        "precio": 140000,
+        "descripcion": "Chaqueta denim con lavado clásico.",
+        "categoriaId": 4,
+        "imagen_url": "assets/uploads/chaqueta-denim.jpg",
+        "variants": [
+          { "id": 701, "talla": "M", "color": "Azul", "stock": 3, "sku": "CHD-DNM-M-01" }
+        ]
+      },
+      {
+        "id": 8,
+        "nombre": "Shorts Cargo",
+        "precio": 62000,
+        "descripcion": "Shorts con bolsillos cargo laterales.",
+        "categoriaId": 7,
+        "imagen_url": "assets/uploads/shorts-cargo.jpg",
+        "variants": [
+          { "id": 801, "talla": "M", "color": "Kaki", "stock": 9, "sku": "SHC-KAK-M-01" }
+        ]
+      },
+      {
+        "id": 9,
+        "nombre": "Zapatillas Runner 200",
+        "precio": 210000,
+        "descripcion": "Zapatillas de running con amortiguación.",
+        "categoriaId": 8,
+        "imagen_url": "assets/uploads/zapatillas-runner.jpg",
+        "variants": [
+          { "id": 901, "talla": "40", "color": "Blanco", "stock": 5, "sku": "ZAP-RUN-40-01" }
+        ]
+      },
+      {
+        "id": 10,
+        "nombre": "Gorra Classic",
+        "precio": 25000,
+        "descripcion": "Gorra con logo bordado.",
+        "categoriaId": 9,
+        "imagen_url": "assets/uploads/gorra.jpg",
+        "variants": [
+          { "id": 1001, "talla": "Única", "color": "Negro", "stock": 30, "sku": "GOR-CL-01" }
+        ]
+      },
+      {
+        "id": 11,
+        "nombre": "Bufanda de Lana",
+        "precio": 40000,
+        "descripcion": "Bufanda lisa en lana acrílica.",
+        "categoriaId": 9,
+        "imagen_url": "assets/uploads/bufanda.jpg",
+        "variants": [
+          { "id": 1101, "talla": "Única", "color": "Burdeos", "stock": 12, "sku": "BUF-LAN-01" }
+        ]
+      },
+      {
+        "id": 12,
+        "nombre": "Cinturón de Cuero",
+        "precio": 38000,
+        "descripcion": "Cinturón con hebilla metálica.",
+        "categoriaId": 9,
+        "imagen_url": "assets/uploads/cinturon.jpg",
+        "variants": [
+          { "id": 1201, "talla": "95", "color": "Marrón", "stock": 14, "sku": "CIN-CU-95-01" }
+        ]
+      }
+    ],
+    "page": 1,
+    "size": 20,
+    "total": 12
+  }
+}

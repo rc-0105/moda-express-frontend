@@ -1,0 +1,8 @@
+.card p { margin: 0; }
+.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
+.product-empty { text-align: center; padding: 2rem; }
+
+@media (max-width: 768px) {
+  aside.col-md-3 { order: 2; }
+  main.col-md-9 { order: 1; }
+}

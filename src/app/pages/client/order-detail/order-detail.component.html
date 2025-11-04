@@ -1,0 +1,105 @@
+<div class="container py-4">
+  <div *ngIf="loading" class="text-center my-5">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <div *ngIf="!loading && order">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h3>Pedido #{{ order.id }}</h3>
+        <div class="mt-1"><span [ngClass]="statusClass(order.estado)">{{ order.estado }}</span></div>
+      </div>
+      <div class="text-end">
+        <small class="text-muted">Fecha: {{ order.fecha | date:'medium' }}</small>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5>Datos de envío</h5>
+            <p class="mb-1"><strong>{{ order.direccion?.nombre }}</strong></p>
+            <p class="mb-1">{{ order.direccion?.direccion }}, {{ order.direccion?.ciudad }}</p>
+            <p class="mb-1">Tel: {{ order.direccion?.telefono }}</p>
+            <hr />
+            <h6>Pago</h6>
+            <p class="mb-1">Método: {{ order.pago?.metodo }}</p>
+            <p class="mb-1">Estado pago: {{ order.pago?.estado }}</p>
+            <hr />
+            <h6>Envío</h6>
+            <p class="mb-1">Transportadora: {{ order.envio_info?.transportadora }}</p>
+            <p class="mb-1">Guía: {{ order.envio_info?.numeroGuia }}</p>
+          </div>
+        </div>
+
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5>Items</h5>
+            <div *ngFor="let it of order.items" class="d-flex align-items-center py-2 border-bottom">
+              <img [src]="it.imagen_url" alt="{{ it.nombre }}" width="64" height="64" class="me-3" />
+              <div class="flex-grow-1">
+                <div class="fw-bold">{{ it.nombre }}</div>
+                <div class="text-muted">{{ it.variante }}</div>
+              </div>
+              <div class="text-end">
+                <div>{{ it.cantidad }} x {{ it.precio_unitario | currency:'COP':'symbol' }}</div>
+                <div class="fw-bold">{{ it.subtotal | currency:'COP':'symbol' }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="audit && audit.length > 0" class="card mb-3">
+          <div class="card-body">
+            <h5>Historial de auditoría</h5>
+            <ul class="list-group">
+              <li *ngFor="let a of audit" class="list-group-item d-flex justify-content-between align-items-start">
+                <div>
+                  <div><strong>{{ a.old_status }}</strong> → <strong>{{ a.new_status }}</strong></div>
+                  <div class="small text-muted">Por {{ a.changed_by }}</div>
+                </div>
+                <div class="small text-muted">{{ a.changed_at | date:'short' }}</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-lg-4">
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5>Resumen</h5>
+            <div class="d-flex justify-content-between"><div>Subtotal</div><div>{{ order.subtotal | currency:'COP':'symbol' }}</div></div>
+            <div class="d-flex justify-content-between"><div>IVA (19%)</div><div>{{ order.iva | currency:'COP':'symbol' }}</div></div>
+            <div class="d-flex justify-content-between"><div>Envío</div><div>{{ order.envio | currency:'COP':'symbol' }}</div></div>
+            <hr />
+            <div class="d-flex justify-content-between fw-bold"><div>Total</div><div>{{ order.total | currency:'COP':'symbol' }}</div></div>
+            <div *ngIf="order.puntos_ganados" class="mt-2">Puntos ganados: {{ order.puntos_ganados }}</div>
+          </div>
+        </div>
+
+        <div class="card mb-3">
+          <div class="card-body d-flex flex-column gap-2">
+            <button class="btn btn-outline-primary" (click)="reprint()">Reimprimir recibo</button>
+            <button class="btn btn-outline-secondary" (click)="contactSupport()">Contactar soporte</button>
+            <div *ngIf="isAdmin" class="mt-2">
+              <label class="form-label small">Cambiar estado</label>
+              <select class="form-select mb-2" #st>
+                <option value="PENDIENTE">PENDIENTE</option>
+                <option value="CONFIRMADO">CONFIRMADO</option>
+                <option value="ENVIADO">ENVIADO</option>
+                <option value="ENTREGADO">ENTREGADO</option>
+                <option value="CANCELADO">CANCELADO</option>
+              </select>
+              <button class="btn btn-sm btn-primary" (click)="changeLocalStatus(st.value)">Aplicar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

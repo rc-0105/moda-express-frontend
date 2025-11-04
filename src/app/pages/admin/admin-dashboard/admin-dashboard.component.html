@@ -1,0 +1,90 @@
+<div class="container py-4">
+  <h2 class="mb-3">Admin Dashboard</h2>
+
+  <div *ngIf="loading" class="text-center my-4">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-12 col-lg-4">
+      <div class="card p-3">
+        <h6>Total ventas (30d)</h6>
+        <div class="display-6">{{ metrics?.total_ventas | currency:'COP':'symbol' }}</div>
+        <small class="text-muted">Pedidos: {{ metrics?.total_pedidos }} • Avg: {{ metrics?.avg_ticket | currency:'COP':'symbol' }}</small>
+        <button class="btn btn-sm btn-outline-secondary mt-2" (click)="refreshMetrics()">Forzar recálculo</button>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <div class="card p-3">
+        <h6>Top productos</h6>
+        <ul class="list-unstyled mt-2">
+          <li *ngFor="let p of metrics?.topProducts | slice:0:5" class="d-flex align-items-center mb-2">
+            <img [src]="p.imagen_url" alt="{{p.nombre}}" width="48" height="48" class="me-2"/>
+            <div class="flex-grow-1">{{ p.nombre }}</div>
+            <div class="ms-2 badge bg-light text-dark">{{ p.cantidad_vendida }}</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <div class="card p-3">
+        <h6>Ventas diarias (últimos días)</h6>
+        <div *ngIf="chartDaily?.length">
+          <div *ngFor="let d of chartDaily" class="d-flex align-items-center mb-1">
+            <div class="me-2 small text-muted" style="width:80px">{{ d.day }}</div>
+            <div class="bar flex-grow-1" [style.width.%]="(d.total / maxDaily()) * 100">{{ d.total | currency:'COP':'symbol' }}</div>
+          </div>
+        </div>
+        <div *ngIf="!chartDaily?.length" class="text-muted">No hay datos</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4 g-3">
+    <div class="col-12 col-lg-7">
+      <div class="card p-3">
+        <h5>Pedidos recientes</h5>
+        <div *ngIf="errorOrders" class="alert alert-danger">{{ errorOrders }}</div>
+        <table class="table table-sm">
+          <thead>
+            <tr><th>ID</th><th>Fecha</th><th>Estado</th><th>Total</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let o of recentOrders">
+              <td>#{{ o.id }}</td>
+              <td>{{ o.fecha | date:'short' }}</td>
+              <td><span class="badge bg-secondary">{{ o.estado }}</span></td>
+              <td>{{ o.total | currency:'COP':'symbol' }}</td>
+              <td><a [routerLink]="['/orders', o.id]" class="btn btn-sm btn-outline-primary">Ver</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-5">
+      <div class="card p-3 mb-3">
+        <h5>Logs recientes (ERROR)</h5>
+        <div *ngIf="errorLogs" class="alert alert-danger">{{ errorLogs }}</div>
+        <ul class="list-group">
+          <li *ngFor="let l of recentLogs" class="list-group-item">
+            <div class="small text-muted">{{ l.timestamp | date:'short' }} • {{ l.service }}</div>
+            <div>{{ l.message }}</div>
+          </li>
+        </ul>
+        <div class="mt-2 text-end"><a routerLink="/admin/logs" class="btn btn-link btn-sm">Ver más</a></div>
+      </div>
+
+      <div class="card p-3">
+        <h5>Acciones rápidas</h5>
+        <div class="d-grid gap-2">
+          <a routerLink="/admin/products" class="btn btn-outline-primary" aria-label="Gestionar productos">Gestionar productos</a>
+          <a routerLink="/admin/orders" class="btn btn-outline-secondary" aria-label="Gestionar pedidos">Gestionar pedidos</a>
+          <a routerLink="/admin/audit" class="btn btn-outline-info" aria-label="Ver auditoría">Auditoría</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,3 @@
-// src/app/services/api/product.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
@@ -25,7 +24,8 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
-  getProducts(params: ProductQueryParams): Observable<PaginatedProductsResponse> {
+  // High-level method used by UI to fetch paginated products (from API or mock fallback)
+  getProducts(params: ProductQueryParams = {}): Observable<PaginatedProductsResponse> {
     const page = params.page ?? 1;
     const size = params.size ?? 20;
 
@@ -56,6 +56,53 @@ export class ProductService {
         return this.loadMock(params);
       })
     );
+  }
+
+  // Convenience methods for components that need lists or single item
+  getAll(): Observable<Product[]> {
+    return this.getProducts({ page: 1, size: 1000 }).pipe(map(r => r.data?.items ?? []));
+  }
+
+  getById(id: number): Observable<Product | undefined> {
+    return this.getAll().pipe(map(items => items.find(p => p.id === id)));
+  }
+
+  // Try to fetch a single product by id from backend; fallback to mock if API fails
+  getProductById(id: number): Observable<Product | undefined> {
+    if (FORCE_MOCK) {
+      return this.getById(id);
+    }
+    return this.http.get<any>(`${this.API_URL}/${id}`).pipe(
+      map(resp => resp?.data as Product),
+      catchError(() => this.getById(id))
+    );
+  }
+
+  // Optional: get recommendations; backend may provide this endpoint
+  getRecommendations(productId: number): Observable<Product[]> {
+    if (FORCE_MOCK) {
+      // simple mock: return first 4 products excluding current
+      return this.getAll().pipe(map(items => items.filter(p => p.id !== productId).slice(0, 4)));
+    }
+
+    return this.http.get<any>(`${this.API_URL}/${productId}/recommendations`).pipe(
+      map(resp => resp?.data?.items ?? []),
+      catchError(() => this.getAll().pipe(map(items => items.filter(p => p.id !== productId).slice(0, 4))))
+    );
+  }
+
+  // Derive categories from mock data or backend response; returns id/name pairs
+  getCategories(): Observable<Array<{ id: number; name: string }>> {
+    // Try to use cached full list
+    return this.getAll().pipe(map(items => {
+      const map = new Map<number, string>();
+      items.forEach(p => {
+        if (p.categoriaId && !map.has(p.categoriaId)) {
+          map.set(p.categoriaId, `Categoría ${p.categoriaId}`);
+        }
+      });
+      return Array.from(map.entries()).map(([id, name]) => ({ id, name }));
+    }));
   }
 
   private loadMock(params: ProductQueryParams): Observable<PaginatedProductsResponse> {

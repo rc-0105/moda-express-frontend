@@ -1,0 +1,8 @@
+{
+  "status": "ok",
+  "data": [
+    {"id":"l1","timestamp":"2025-11-03T10:00:00Z","service":"OrderService","level":"ERROR","message":"Error al crear pedido: stock insuficiente"},
+    {"id":"l2","timestamp":"2025-11-02T14:00:00Z","service":"PaymentService","level":"ERROR","message":"Timeout gateway"},
+    {"id":"l3","timestamp":"2025-11-01T08:30:00Z","service":"InventoryService","level":"WARN","message":"Nivel de stock bajo producto 12"}
+  ]
+}

@@ -1,0 +1,57 @@
+<div class="container my-4">
+  <div class="row mb-3">
+    <div class="col-12 d-flex gap-2">
+      <input class="form-control" type="search" placeholder="Buscar productos..." [value]="q" (input)="onSearchInput($event.target.value)" />
+      <select class="form-select w-auto" [(ngModel)]="sort" (change)="applyFilters()">
+        <option value="">Ordenar</option>
+        <option value="price_asc">Precio: menor a mayor</option>
+        <option value="price_desc">Precio: mayor a menor</option>
+        <option value="newest">Más nuevos</option>
+      </select>
+      <select class="form-select w-auto" [(ngModel)]="size" (change)="changeSize(size)">
+        <option *ngFor="let s of sizeOptions" [ngValue]="s">{{s}} / página</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="row">
+    <aside class="col-md-3 mb-3">
+      <div class="card p-3">
+        <h6>Categorías</h6>
+        <ul class="list-unstyled">
+          <li *ngFor="let c of categories"><a (click)="categoria = c.id; applyFilters();" class="d-block">{{c.name}}</a></li>
+        </ul>
+        <hr />
+        <h6>Tallas</h6>
+        <div *ngFor="let t of tallas" class="form-check"><input class="form-check-input" type="radio" name="talla" [value]="t" [(ngModel)]="talla" (change)="applyFilters()"/> <label class="form-check-label">{{t}}</label></div>
+        <hr />
+        <h6>Colores</h6>
+        <div *ngFor="let c of colores" class="form-check"><input class="form-check-input" type="radio" name="color" [value]="c" [(ngModel)]="color" (change)="applyFilters()"/> <label class="form-check-label">{{c}}</label></div>
+        <div class="mt-3 d-flex gap-2"><button class="btn btn-sm btn-secondary" (click)="clearFilters()">Limpiar</button></div>
+      </div>
+    </aside>
+
+    <main class="col-md-9">
+      <div *ngIf="loading" class="text-center my-4"><app-loading-spinner></app-loading-spinner></div>
+      <div *ngIf="error" class="alert alert-danger">{{error}} <button class="btn btn-sm btn-link" (click)="retry()">Reintentar</button></div>
+      <div *ngIf="!loading && products?.length === 0" class="alert alert-info">No se encontraron productos.</div>
+
+      <div class="row g-3">
+        <div *ngFor="let p of products" class="col-6 col-md-4 col-lg-3">
+          <app-product-card [product]="p" (add)="onAddFromCard($event)" (view)="viewDetails(p.id)"></app-product-card>
+        </div>
+      </div>
+
+      <div class="d-flex align-items-center justify-content-between mt-3">
+        <div>Mostrando página {{page}} de {{ totalPages }} — {{total}} productos</div>
+        <nav aria-label="Paginación">
+          <ul class="pagination mb-0">
+            <li class="page-item" [class.disabled]="page===1"><a class="page-link" (click)="prevPage()">«</a></li>
+            <li class="page-item" *ngFor="let p of pagesArray()" [class.active]="p===page"><a class="page-link" (click)="goToPage(p)">{{p}}</a></li>
+            <li class="page-item" [class.disabled]="page===totalPages"><a class="page-link" (click)="nextPage()">»</a></li>
+          </ul>
+        </nav>
+      </div>
+    </main>
+  </div>
+</div>

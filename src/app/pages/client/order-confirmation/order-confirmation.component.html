@@ -1,0 +1,10 @@
+<div class="container py-5 text-center">
+  <div class="card p-4">
+    <h3>Pedido recibido</h3>
+    <p *ngIf="pedidoId">Tu pedido <strong>#{{ pedidoId }}</strong> se ha creado correctamente.</p>
+    <p *ngIf="!pedidoId">Hemos recibido tu pedido. Gracias por comprar con nosotros.</p>
+    <div class="mt-3">
+      <button class="btn btn-primary" (click)="goHome()">Volver al inicio</button>
+    </div>
+  </div>
+</div>

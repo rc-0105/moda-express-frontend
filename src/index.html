@@ -6,6 +6,11 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <!-- Development Content Security Policy: relax for local dev (allows data: media, localhost connections, ws, etc.)
+   IMPORTANT: tighten or remove this in production! -->
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self' data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; connect-src 'self' ws: http://localhost:4200 http://127.0.0.1:4200 http://localhost:* ws://localhost:*; media-src 'self' data: blob:;">
+
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>

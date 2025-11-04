@@ -1,14 +1,16 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ProductListComponent } from './features/product-list/product-list';
+import { HeaderComponent } from './components/shared/header/header.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, ProductListComponent],
+  imports: [RouterOutlet, HeaderComponent],
   template: `
-    <main>
-      <app-product-list></app-product-list>
-      <router-outlet></router-outlet>
+    <app-header></app-header>
+    <main class="py-4">
+      <div class="container">
+        <router-outlet></router-outlet>
+      </div>
     </main>
   `,
   styleUrl: './app.css'

@@ -1,0 +1,100 @@
+<div class="container py-4">
+  <h2>Checkout</h2>
+
+  <div *ngIf="cartItems.length === 0" class="alert alert-info">Tu carrito está vacío.</div>
+
+  <div class="row">
+    <div class="col-md-7">
+      <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label class="form-label">Nombre</label>
+          <input class="form-control" formControlName="nombre" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input class="form-control" formControlName="email" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Dirección</label>
+          <input class="form-control" formControlName="direccion" />
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Ciudad</label>
+            <input class="form-control" formControlName="ciudad" />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Teléfono</label>
+            <input class="form-control" formControlName="telefono" />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Método de pago</label>
+          <select class="form-select" formControlName="metodo_pago">
+            <option value="contrareembolso">Contra reembolso</option>
+            <option value="tarjeta">Tarjeta</option>
+          </select>
+        </div>
+
+        <div *ngIf="checkoutForm.value.metodo_pago === 'tarjeta'">
+          <div class="mb-3">
+            <label class="form-label">Número de tarjeta</label>
+            <input class="form-control" formControlName="cardNumber" />
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Expira</label>
+              <input class="form-control" formControlName="cardExpiry" />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">CVV</label>
+              <input class="form-control" formControlName="cardCvv" />
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+        <button class="btn btn-primary" [disabled]="loading || !canSubmit()">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+          Pagar {{ total | currency:'USD' }}
+        </button>
+      </form>
+    </div>
+
+    <div class="col-md-5">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Resumen de la compra</h5>
+          <ul class="list-group mb-3">
+            <li *ngFor="let it of cartItems" class="list-group-item d-flex justify-content-between align-items-center">
+              <div>
+                <div>{{ it.nombre }} <small class="text-muted">x{{ it.cantidad }}</small></div>
+                <small class="text-muted">{{ it.talla ? 'T:' + it.talla : '' }} {{ it.color ? 'C:' + it.color : '' }}</small>
+              </div>
+              <div>{{ (it.precio * it.cantidad) | currency:'USD' }}</div>
+            </li>
+          </ul>
+
+          <div class="d-flex justify-content-between">
+            <div>Subtotal</div>
+            <div>{{ subtotal | currency:'USD' }}</div>
+          </div>
+          <div class="d-flex justify-content-between">
+            <div>Envío</div>
+            <div>{{ (total - subtotal) | currency:'USD' }}</div>
+          </div>
+          <hr />
+          <div class="d-flex justify-content-between fw-bold">
+            <div>Total</div>
+            <div>{{ total | currency:'USD' }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

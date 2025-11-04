@@ -1,0 +1,8 @@
+.img-thumbnail { border-radius: 4px; }
+.card .table { margin-bottom: 0; }
+
+@media (max-width: 767px) {
+  .table thead { display: none; }
+  .table tbody td { display: block; width: 100%; }
+  .table tbody tr { margin-bottom: 1rem; display: block; }
+}

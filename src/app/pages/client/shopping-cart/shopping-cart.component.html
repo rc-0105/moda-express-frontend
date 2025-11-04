@@ -1,0 +1,76 @@
+<div class="container my-4">
+  <h1 class="mb-3">Tu carrito</h1>
+  <div *ngIf="loading" class="text-center my-4">
+    <div class="d-flex align-items-center justify-content-center">
+      <div class="spinner-border" role="status" aria-hidden="true"></div>
+      <span class="ms-2 visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <div *ngIf="items.length === 0" class="alert alert-info">
+    Tu carrito está vacío. <a class="btn btn-link p-0" (click)="continueShopping()">Ver catálogo</a>
+  </div>
+
+  <div *ngIf="items.length > 0" class="row">
+    <div class="col-md-8">
+      <div class="card mb-3">
+        <div class="table-responsive">
+          <table class="table align-middle mb-0">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Producto</th>
+                <th>Variante</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let it of items">
+                <td style="width:80px"><img [src]="it.imagen_url" [alt]="it.nombre" class="img-thumbnail" style="width:64px;height:64px;object-fit:cover"/></td>
+                <td>{{ it.nombre }}</td>
+                <td>{{ it.talla }} / {{ it.color }}</td>
+                <td>{{ it.precio | number:'1.0-0' }} COP</td>
+                <td style="width:160px">
+                  <div class="input-group">
+                    <button class="btn btn-outline-secondary" (click)="decrement(it)">−</button>
+                    <input class="form-control text-center" type="number" [value]="it.cantidad" (change)="onQtyChange(it, $any($event.target).value)" min="1" [max]="it.stock" />
+                    <button class="btn btn-outline-secondary" (click)="increment(it)">+</button>
+                  </div>
+                </td>
+                <td>{{ getSubtotal(it) | number:'1.0-0' }} COP</td>
+                <td>
+                  <button class="btn btn-outline-danger btn-sm" (click)="remove(it)">Eliminar</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between mb-3">
+        <div>
+          <button class="btn btn-outline-secondary" (click)="continueShopping()">Seguir comprando</button>
+        </div>
+        <div>
+          <button class="btn btn-outline-danger" (click)="clearCart()">Vaciar carrito</button>
+        </div>
+      </div>
+    </div>
+
+    <aside class="col-md-4">
+      <div class="card p-3">
+        <h5>Resumen del pedido</h5>
+        <div class="d-flex justify-content-between"><div>Subtotal</div><div>{{ cartService.getTotal() | number:'1.0-0' }} COP</div></div>
+        <div class="d-flex justify-content-between"><div>Envío</div><div *ngIf="cartService.getTotal()>0">{{ shippingCost | number:'1.0-0' }} COP</div><div *ngIf="cartService.getTotal()===0">Gratis</div></div>
+        <hr />
+        <div class="d-flex justify-content-between fw-bold"><div>Total</div><div>{{ getTotal() | number:'1.0-0' }} COP</div></div>
+        <div class="mt-3">
+          <button class="btn btn-primary w-100" (click)="checkout()">Continuar al pago</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>

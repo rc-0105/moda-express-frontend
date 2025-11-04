@@ -1,0 +1,88 @@
+<div class="container py-4">
+  <h3 class="mb-3">Gestión de pedidos</h3>
+
+  <div class="d-flex gap-2 mb-3">
+    <input class="form-control" placeholder="Buscar por ID o cliente" [(ngModel)]="q" />
+    <select class="form-select w-auto" [(ngModel)]="estadoFilter">
+      <option value="">Todos</option>
+      <option *ngFor="let s of ['PENDIENTE','CONFIRMADO','PAGADO','ENVIADO','ENTREGADO','CANCELADO']" [value]="s">{{ s }}</option>
+    </select>
+    <button class="btn btn-primary" (click)="load()">Actualizar lista</button>
+  </div>
+
+  <div *ngIf="loading" class="text-center my-3"><app-loading-spinner></app-loading-spinner></div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <div class="mb-2">{{ total }} pedidos encontrados</div>
+
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr><th>ID</th><th>Cliente</th><th>Fecha</th><th>Estado</th><th>Método Pago</th><th>Total</th><th>Acciones</th></tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let o of orders">
+          <td>{{ o.id }}</td>
+          <td>{{ o.usuario_nombre || o.usuario }}</td>
+          <td>{{ o.fecha | date:'short' }}</td>
+          <td><span class="badge" [ngClass]="{
+            'bg-warning text-dark': o.estado==='PENDIENTE', 'bg-primary': o.estado==='CONFIRMADO', 'bg-info': o.estado==='PAGADO', 'bg-secondary': o.estado==='ENVIADO', 'bg-success': o.estado==='ENTREGADO', 'bg-danger': o.estado==='CANCELADO'
+          }">{{ o.estado }}</span></td>
+          <td>{{ o.metodo_pago }}</td>
+          <td>{{ o.total | currency:'COP':'symbol' }}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-primary me-1" (click)="openDetail(o)">Ver</button>
+            <button class="btn btn-sm btn-outline-secondary" (click)="openChangeStatus(o)">Cambiar estado</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center">
+    <div>Mostrando {{ (page-1)*size + 1 }} - {{ (page*size) < total ? (page*size) : total }} de {{ total }}</div>
+    <div>
+      <button class="btn btn-sm btn-outline-secondary me-2" (click)="prev()" [disabled]="page===1">Anterior</button>
+      <button class="btn btn-sm btn-outline-secondary" (click)="next()" [disabled]="page*size >= total">Siguiente</button>
+    </div>
+  </div>
+
+  <!-- Detalle / modal simple -->
+  <div *ngIf="showDetail" class="modal-backdrop">
+    <div class="modal-dialog modal-lg modal-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Pedido #{{ selectedOrder?.id }}</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closeDetail()"></button>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="!selectedOrder">Cargando...</div>
+          <div *ngIf="selectedOrder">
+            <p><strong>Cliente:</strong> {{ selectedOrder.usuario_nombre }}</p>
+            <p><strong>Fecha:</strong> {{ selectedOrder.fecha | date:'medium' }}</p>
+            <p><strong>Estado:</strong> {{ selectedOrder.estado }}</p>
+            <h6>Items</h6>
+            <ul>
+              <li *ngFor="let it of selectedOrder.items">{{ it.nombre }} x{{ it.cantidad }} — {{ it.precio_unitario | currency:'COP':'symbol' }}</li>
+            </ul>
+            <h6>Historial</h6>
+            <div *ngIf="audit && audit.length===0" class="text-muted">Sin historial</div>
+            <ul *ngIf="audit && audit.length>0">
+              <li *ngFor="let a of audit">{{ a.changed_at | date:'short' }} — {{ a.old_status }} → {{ a.new_status }} por {{ a.changed_by }}</li>
+            </ul>
+            <div class="mt-3">
+              <label class="form-label">Cambiar estado</label>
+              <select class="form-select" [(ngModel)]="newStatus">
+                <option *ngFor="let s of statusOptions" [value]="s">{{ s }}</option>
+              </select>
+              <div class="mt-2 text-end">
+                <button class="btn btn-primary" (click)="saveStatus()">Guardar cambio</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

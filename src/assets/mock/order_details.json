@@ -1,0 +1,59 @@
+[
+  {
+    "id": 101,
+    "usuario_id": 1,
+    "fecha": "2025-10-01T10:15:00Z",
+    "estado": "ENTREGADO",
+    "subtotal": 150000,
+    "iva": 28500,
+    "envio": 0,
+    "total": 178500,
+    "puntos_ganados": 15,
+    "direccion": {
+      "nombre": "Juana Coronado",
+      "direccion": "Calle Falsa 123",
+      "ciudad": "Bogotá",
+      "telefono": "+57 300 0000000"
+    },
+    "pago": { "metodo": "TARJETA", "estado": "APROBADO", "monto": 178500 },
+    "envio_info": { "transportadora": "Servienvíos", "numeroGuia": "SV101", "estadoEnvio": "ENTREGADO", "fechaEstimada": "2025-10-03" },
+    "items": [
+      { "producto_id": 101, "nombre": "Hoodie Classic", "variante": "M / Negro", "cantidad": 1, "precio_unitario": 75000, "subtotal": 75000, "imagen_url": "/assets/uploads/hoodie-negra.jpg" },
+      { "producto_id": 102, "nombre": "Camisa Casual", "variante": "L / Blanca", "cantidad": 1, "precio_unitario": 75000, "subtotal": 75000, "imagen_url": "/assets/uploads/camisa-rayas.jpg" }
+    ]
+  },
+  {
+    "id": 102,
+    "usuario_id": 1,
+    "fecha": "2025-10-15T14:30:00Z",
+    "estado": "ENVIADO",
+    "subtotal": 80000,
+    "iva": 15200,
+    "envio": 3000,
+    "total": 98200,
+    "puntos_ganados": 8,
+    "direccion": { "nombre": "Juan Perez", "direccion": "Av Siempre Viva 5", "ciudad": "Medellín", "telefono": "+57 310 1111111" },
+    "pago": { "metodo": "CONTRA_REEMBOLSO", "estado": "PENDIENTE", "monto": 98200 },
+    "envio_info": { "transportadora": "Servienvíos", "numeroGuia": "SV102", "estadoEnvio": "EN_TRANSITO", "fechaEstimada": "2025-10-18" },
+    "items": [
+      { "producto_id": 201, "nombre": "Camiseta Blanca Classic", "variante": "M / Blanco", "cantidad": 2, "precio_unitario": 40000, "subtotal": 80000, "imagen_url": "/assets/uploads/camiseta-blanca.jpg" }
+    ]
+  },
+  {
+    "id": 103,
+    "usuario_id": 1,
+    "fecha": "2025-10-20T09:20:00Z",
+    "estado": "CONFIRMADO",
+    "subtotal": 60000,
+    "iva": 11400,
+    "envio": 3000,
+    "total": 74400,
+    "puntos_ganados": 6,
+    "direccion": { "nombre": "María López", "direccion": "Calle 7 #4-12", "ciudad": "Cali", "telefono": "+57 320 2222222" },
+    "pago": { "metodo": "TARJETA", "estado": "APROBADO", "monto": 74400 },
+    "envio_info": { "transportadora": "Servienvíos", "numeroGuia": "SV103", "estadoEnvio": "PREPARANDO", "fechaEstimada": "2025-10-22" },
+    "items": [
+      { "producto_id": 301, "nombre": "Jeans Slim Fit Azul", "variante": "34 / Azul", "cantidad": 1, "precio_unitario": 60000, "subtotal": 60000, "imagen_url": "/assets/uploads/jeans-azul.jpg" }
+    ]
+  }
+]

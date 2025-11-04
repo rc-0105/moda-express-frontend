@@ -1,0 +1,33 @@
+{
+  "status": "ok",
+  "data": {
+    "total_ventas": 1250000.00,
+    "total_pedidos": 123,
+    "avg_ticket": 10162.6,
+    "topProducts": [
+      {"idProducto":12,"nombre":"Camiseta X","cantidad_vendida":150,"imagen_url":"/assets/uploads/camiseta-x.jpg"},
+      {"idProducto":45,"nombre":"Hoodie Y","cantidad_vendida":120,"imagen_url":"/assets/uploads/hoodie-negra.jpg"},
+      {"idProducto":7,"nombre":"Jeans Slim Fit Azul","cantidad_vendida":80,"imagen_url":"/assets/uploads/jeans-azul.jpg"},
+      {"idProducto":2,"nombre":"Hoodie Negra Urban","cantidad_vendida":60,"imagen_url":"/assets/uploads/hoodie-negra.jpg"},
+      {"idProducto":1,"nombre":"Camiseta Blanca Classic","cantidad_vendida":50,"imagen_url":"/assets/uploads/camiseta-blanca.jpg"}
+    ],
+    "daily": [
+      {"day":"2025-10-05","total":15000},
+      {"day":"2025-10-06","total":12000},
+      {"day":"2025-10-07","total":18000},
+      {"day":"2025-10-08","total":9000},
+      {"day":"2025-10-09","total":22000},
+      {"day":"2025-10-10","total":16000},
+      {"day":"2025-10-11","total":14000},
+      {"day":"2025-10-12","total":20000},
+      {"day":"2025-10-13","total":11000},
+      {"day":"2025-10-14","total":19000},
+      {"day":"2025-10-15","total":12000},
+      {"day":"2025-10-16","total":13000},
+      {"day":"2025-10-17","total":12500},
+      {"day":"2025-10-18","total":18000},
+      {"day":"2025-10-19","total":15000},
+      {"day":"2025-10-20","total":6000}
+    ]
+  }
+}

@@ -1,0 +1,5 @@
+[
+  { "id": 501, "pedido_id": 123, "old_status":"PAGADO", "new_status":"ENVIADO", "changed_by":"system", "changed_at":"2025-11-03T09:20:00Z" },
+  { "id": 502, "pedido_id": 124, "old_status":"PENDIENTE", "new_status":"PAGADO", "changed_by":"admin", "changed_at":"2025-11-03T11:10:00Z" },
+  { "id": 503, "pedido_id": 123, "old_status":"ENVIADO", "new_status":"ENTREGADO", "changed_by":"courier", "changed_at":"2025-11-05T08:00:00Z" }
+]

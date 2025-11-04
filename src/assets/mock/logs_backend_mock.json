@@ -1,0 +1,5 @@
+[
+  { "id":"l1", "timestamp":"2025-11-03T10:00:00Z", "level":"ERROR", "service":"OrderService", "endpoint":"/api/orders", "message":"Error al crear pedido: stock insuficiente","stacktrace":"java.sql.SQLException: ...","metadata":{"pedido_id":999,"user":"u123"} },
+  { "id":"l2", "timestamp":"2025-11-03T10:05:00Z", "level":"WARN", "service":"PaymentService", "endpoint":"/api/payments", "message":"Tiempo de espera en gateway de pagos","stacktrace":"","metadata":{} },
+  { "id":"l3", "timestamp":"2025-11-03T11:00:00Z", "level":"INFO", "service":"AuthService", "endpoint":"/api/login", "message":"Usuario u123 inició sesión","stacktrace":"","metadata":{"user":"u123"} }
+]

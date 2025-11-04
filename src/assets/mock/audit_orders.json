@@ -1,0 +1,5 @@
+[
+  { "pedido_id": 101, "old_status": "PENDIENTE", "new_status": "PAGADO", "changed_by": "system", "changed_at": "2025-10-01T10:16:00Z" },
+  { "pedido_id": 101, "old_status": "PAGADO", "new_status": "ENVIADO", "changed_by": "admin", "changed_at": "2025-10-02T08:00:00Z" },
+  { "pedido_id": 102, "old_status": "PENDIENTE", "new_status": "CANCELADO", "changed_by": "user", "changed_at": "2025-09-05T12:00:00Z" }
+]

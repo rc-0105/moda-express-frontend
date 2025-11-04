@@ -1,0 +1,106 @@
+<div class="container my-4" *ngIf="!loading; else loadingTpl">
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <div *ngIf="product" class="row">
+    <div class="col-md-5">
+      <div class="card">
+        <img [src]="mainImage" [alt]="product.nombre" class="img-fluid main-image" />
+        <div class="d-flex gap-2 p-2 overflow-auto">
+          <img *ngFor="let img of (product.images || [product.imagen_url])" [src]="img" [alt]="product.nombre" class="thumb" (click)="changeMainImage(img)" />
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-7">
+      <h2>{{ product.nombre }}</h2>
+      <p class="text-muted">{{ product.descripcion }}</p>
+      <h4 class="text-primary">{{ product.precio | number:'1.0-0' }} COP</h4>
+
+      <div class="mb-2">
+        <span *ngIf="product.reviews?.avgRating" class="badge bg-success">★ {{product.reviews.avgRating}} ({{product.reviews.count}})</span>
+      </div>
+
+      <div *ngIf="product.variants?.length" class="mb-3">
+        <label class="form-label">Talla</label>
+        <select class="form-select mb-2" [(ngModel)]="selectedTalla" (change)="syncSelectedVariant()" aria-label="Selecciona talla">
+          <option *ngFor="let v of product.variants | unique:'talla'" [value]="v.talla">{{ v.talla }}</option>
+        </select>
+
+        <label class="form-label">Color</label>
+        <select class="form-select mb-2" [(ngModel)]="selectedColor" (change)="syncSelectedVariant()" aria-label="Selecciona color">
+          <option *ngFor="let v of product.variants | unique:'color'" [value]="v.color">{{ v.color }}</option>
+        </select>
+
+        <div class="mb-2 small text-muted">Stock: <strong>{{ variantStockLabel(selectedVariant) }}</strong></div>
+      </div>
+
+      <div class="d-flex align-items-center gap-2 mb-3">
+        <label class="form-label mb-0">Cantidad</label>
+        <div class="input-group w-auto">
+          <button class="btn btn-outline-secondary" (click)="changeQty(-1)" aria-label="Menos">-</button>
+          <input class="form-control text-center" type="number" [value]="qty" (input)="qty = $any($event.target).valueAsNumber" min="1" [max]="selectedVariant?.stock ?? 1" aria-label="Cantidad" />
+          <button class="btn btn-outline-secondary" (click)="changeQty(1)" aria-label="Más">+</button>
+        </div>
+
+        <button class="btn btn-primary" (click)="addToCart()" [disabled]="(selectedVariant?.stock ?? 0) === 0">Agregar al carrito</button>
+      </div>
+
+      <div *ngIf="product.descripcion" class="mb-3">
+        <h5>Detalles</h5>
+        <p>{{ product.descripcion }}</p>
+      </div>
+    </div>
+  </div>
+
+  <hr />
+
+  <div class="row">
+    <div class="col-md-8">
+      <h4>Reseñas ({{ reviewsTotal }})</h4>
+      <div *ngIf="reviewsLoading" class="my-3"><app-loading-spinner></app-loading-spinner></div>
+      <div *ngIf="!reviewsLoading && reviews.length === 0" class="alert alert-info">Aún no hay reseñas.</div>
+      <div *ngFor="let r of reviews" class="mb-3">
+        <div><strong>Usuario {{ r.user_id }}</strong> · <small class="text-muted">{{ r.created_at | date:'medium' }}</small></div>
+        <div>Rating: {{ r.rating }} / 5</div>
+        <div>{{ r.comment }}</div>
+      </div>
+
+      <form (ngSubmit)="submitReview()" [formGroup]="reviewForm" class="mt-4">
+        <h5>Dejar una reseña</h5>
+        <div class="mb-2">
+          <label class="form-label">Rating</label>
+          <select class="form-select w-auto" formControlName="rating" aria-label="Selecciona rating">
+            <option *ngFor="let n of [5,4,3,2,1]" [value]="n">{{n}}</option>
+          </select>
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Comentario</label>
+          <textarea class="form-control" formControlName="comment" rows="3" aria-label="Comentario"></textarea>
+        </div>
+        <button class="btn btn-outline-primary" type="submit" [disabled]="reviewForm.invalid">Enviar reseña</button>
+      </form>
+    </div>
+
+    <aside class="col-md-4">
+      <h5>Productos relacionados</h5>
+      <div *ngIf="product">
+        <app-product-card *ngFor="let rp of (product.recommendations || [])" [product]="rp"></app-product-card>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Toast -->
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index:1055">
+    <div *ngIf="showToast" class="toast show align-items-center text-bg-primary border-0">
+      <div class="d-flex">
+        <div class="toast-body">{{ toastMessage }}</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" (click)="showToast=false" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<ng-template #loadingTpl>
+  <div class="text-center my-5"><app-loading-spinner></app-loading-spinner></div>
+</ng-template>

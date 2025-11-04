@@ -1,0 +1,148 @@
+<div class="container py-4">
+  <h3>Auditoría & Logs</h3>
+
+  <ul class="nav nav-tabs my-3" role="tablist">
+    <li class="nav-item" role="presentation"><button class="nav-link" [class.active]="activeTab==='audit'" (click)="activeTab='audit'; loadAudit()" role="tab" aria-label="Pestaña Auditoría">Auditoría</button></li>
+    <li class="nav-item" role="presentation"><button class="nav-link" [class.active]="activeTab==='logs'" (click)="activeTab='logs'; loadLogs()" role="tab" aria-label="Pestaña Logs">Logs</button></li>
+  </ul>
+
+  <div class="card p-3 mb-3">
+    <div class="row g-2 align-items-end">
+      <div class="col-auto">
+        <label class="form-label small">Desde</label>
+        <input aria-label="fecha inicio" class="form-control" type="date" [(ngModel)]="startDate" />
+      </div>
+      <div class="col-auto">
+        <label class="form-label small">Hasta</label>
+        <input aria-label="fecha fin" class="form-control" type="date" [(ngModel)]="endDate" />
+      </div>
+      <div class="col">
+        <label class="form-label small">Buscar</label>
+        <input aria-label="buscar" class="form-control" placeholder="pedido_id, usuario, mensaje..." [(ngModel)]="q" />
+      </div>
+      <div *ngIf="activeTab==='logs'" class="col-auto">
+        <label class="form-label small">Nivel</label>
+        <select class="form-select" [(ngModel)]="logLevel" aria-label="nivel">
+          <option value="">Todos</option>
+          <option>ERROR</option>
+          <option>WARN</option>
+          <option>INFO</option>
+        </select>
+      </div>
+      <div class="col-auto">
+        <button class="btn btn-secondary" (click)="refresh()">Refrescar</button>
+        <button class="btn btn-outline-primary ms-2" (click)="(activeTab==='audit'?exportAuditCsv():exportLogsCsv())">Exportar CSV</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audit tab -->
+  <div *ngIf="activeTab==='audit'">
+    <div *ngIf="auditLoading" class="text-center"><div class="spinner-border" role="status" aria-hidden="true"></div></div>
+    <div *ngIf="auditError" class="alert alert-danger">{{ auditError }}</div>
+    <div *ngIf="!auditLoading && !auditError && auditItems.length===0" class="text-muted">No hay entradas de auditoría</div>
+
+    <div *ngIf="auditItems.length>0">
+      <table class="table table-hover" role="table">
+        <thead><tr><th>ID</th><th>Pedido</th><th>Anterior</th><th>Nuevo</th><th>Usuario</th><th>Fecha</th><th></th></tr></thead>
+        <tbody>
+          <tr *ngFor="let a of auditItems" (click)="openAuditDetail(a)" style="cursor:pointer">
+            <td>{{ a.id }}</td>
+            <td>{{ a.pedido_id }}</td>
+            <td>{{ a.old_status }}</td>
+            <td>{{ a.new_status }}</td>
+            <td>{{ a.changed_by }}</td>
+            <td>{{ a.changed_at | date:'short' }}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-success" (click)="$event.stopPropagation(); markReviewed(a)">Marcar revisado</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="d-flex justify-content-between align-items-center">
+        <div>Mostrando {{ (auditPage-1)*auditSize + 1 }} - {{ (auditPage*auditSize) < auditTotal ? (auditPage*auditSize) : auditTotal }} de {{ auditTotal }}</div>
+        <div>
+          <select class="form-select d-inline-block w-auto me-2" [(ngModel)]="auditSize" (ngModelChange)="auditPage=1; loadAudit()">
+            <option *ngFor="let s of auditSizes" [value]="s">{{ s }}</option>
+          </select>
+          <button class="btn btn-sm btn-outline-secondary me-2" (click)="auditPrev()" [disabled]="auditPage===1">Anterior</button>
+          <button class="btn btn-sm btn-outline-secondary" (click)="auditNext()" [disabled]="auditPage*auditSize >= auditTotal">Siguiente</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logs tab -->
+  <div *ngIf="activeTab==='logs'">
+    <div *ngIf="logLoading" class="text-center"><div class="spinner-border" role="status" aria-hidden="true"></div></div>
+    <div *ngIf="logError" class="alert alert-danger">{{ logError }}</div>
+    <div *ngIf="!logLoading && !logError && logItems.length===0" class="text-muted">No hay logs</div>
+
+    <div *ngIf="logItems.length>0">
+      <table class="table table-hover" role="table">
+        <thead><tr><th>Timestamp</th><th>Nivel</th><th>Servicio</th><th>Endpoint</th><th>Mensaje</th><th></th></tr></thead>
+        <tbody>
+          <tr *ngFor="let l of logItems">
+            <td>{{ l.timestamp | date:'short' }}</td>
+            <td><span class="badge bg-secondary">{{ l.level }}</span></td>
+            <td>{{ l.service }}</td>
+            <td>{{ l.endpoint }}</td>
+            <td>{{ l.message | slice:0:80 }}<span *ngIf="(l.message?.length||0)>80">...</span></td>
+            <td><button class="btn btn-sm btn-outline-primary" (click)="openLogDetail(l)">Ver</button></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="d-flex justify-content-between align-items-center">
+        <div>Mostrando {{ (logPage-1)*logSize + 1 }} - {{ (logPage*logSize) < logTotal ? (logPage*logSize) : logTotal }} de {{ logTotal }}</div>
+        <div>
+          <select class="form-select d-inline-block w-auto me-2" [(ngModel)]="logSize" (ngModelChange)="logPage=1; loadLogs()">
+            <option *ngFor="let s of logSizes" [value]="s">{{ s }}</option>
+          </select>
+          <button class="btn btn-sm btn-outline-secondary me-2" (click)="logPrev()" [disabled]="logPage===1">Anterior</button>
+          <button class="btn btn-sm btn-outline-secondary" (click)="logNext()" [disabled]="logPage*logSize >= logTotal">Siguiente</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail modal / side panel -->
+  <div *ngIf="selectedAudit || selectedLog" class="modal-backdrop">
+    <div class="modal-dialog modal-lg modal-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Detalle</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="selectedAudit=null; selectedLog=null"></button>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="selectedAudit">
+            <p><strong>ID:</strong> {{ selectedAudit.id }}</p>
+            <p><strong>Pedido:</strong> {{ selectedAudit.pedido_id }} <button class="btn btn-sm btn-link" (click)="viewOrder(selectedAudit)">Ver pedido</button></p>
+            <p><strong>Anterior:</strong> {{ selectedAudit.old_status }}</p>
+            <p><strong>Nuevo:</strong> {{ selectedAudit.new_status }}</p>
+            <p><strong>Usuario:</strong> {{ selectedAudit.changed_by }}</p>
+            <p><strong>Fecha:</strong> {{ selectedAudit.changed_at | date:'medium' }}</p>
+          </div>
+
+          <div *ngIf="selectedLog">
+            <p><strong>Timestamp:</strong> {{ selectedLog.timestamp | date:'medium' }}</p>
+            <p><strong>Level:</strong> {{ selectedLog.level }}</p>
+            <p><strong>Service:</strong> {{ selectedLog.service }}</p>
+            <p><strong>Endpoint:</strong> {{ selectedLog.endpoint }}</p>
+            <h6>Mensaje</h6>
+            <pre class="stacktrace">{{ selectedLog.message }}</pre>
+            <h6>Metadata</h6>
+            <div *ngIf="selectedLog.metadata; else nometa">
+              <ul>
+                <li *ngFor="let k of (selectedLog.metadata | keyvalue)">{{ k.key }}: {{ k.value }}</li>
+              </ul>
+            </div>
+            <ng-template #nometa><div class="text-muted">Sin metadata</div></ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
